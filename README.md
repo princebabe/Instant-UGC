@@ -20,7 +20,7 @@ InstantUGC is an AI-driven SaaS platform that converts simple product ideas or U
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS (Dark mode optimized)
 - **UI Components**: Custom React components
