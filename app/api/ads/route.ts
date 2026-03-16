@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { getSupabaseClient, isSupabaseConfigured } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    const supabase = getSupabaseClient()
     const { data, error, count } = await supabase
       .from('ads')
       .select('*', { count: 'exact' })
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const supabase = getSupabaseClient()
     const { data, error } = await supabase
       .from('ads')
       .insert({

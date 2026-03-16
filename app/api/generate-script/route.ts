@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+function getOpenAIClient() {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OpenAI API key not configured')
+  }
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +20,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    const openai = getOpenAIClient()
 
     // Generate UGC-style script using GPT-4
     const completion = await openai.chat.completions.create({
