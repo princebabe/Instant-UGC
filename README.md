@@ -1,6 +1,14 @@
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprincebabe%2FInstant-UGC&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,OPENAI_API_KEY,NEXT_PUBLIC_APP_URL&envDescription=API%20keys%20needed%20for%20InstantUGC&envLink=https%3A%2F%2Fgithub.com%2Fprincebabe%2FInstant-UGC%2Fblob%2Fmain%2FDEPLOYMENT.md&project-name=instant-ugc&repository-name=instant-ugc)
+
 # InstantUGC - AI-Powered Video Ads Generator
 
 Transform your business ideas into high-converting UGC-style video ads instantly with AI.
+
+## 🚀 Quick Deploy
+
+Click the button above to deploy to Vercel in one click!
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 ## Overview
 
@@ -37,15 +45,7 @@ InstantUGC is an AI-driven SaaS platform that converts simple product ideas or U
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+ and npm
-- Supabase account (for database)
-- OpenAI API key
-- ElevenLabs API key
-- Shotstack/HeyGen API key (for video rendering)
-
-### Installation
+### Local Development
 
 1. Clone the repository:
 ```bash
@@ -72,12 +72,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 # OpenAI
 OPENAI_API_KEY=your_openai_api_key
 
-# ElevenLabs
+# ElevenLabs (optional)
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 
-# Video Rendering
+# Video Rendering (optional)
 VIDEO_RENDER_API_KEY=your_video_render_api_key
 VIDEO_RENDER_API_URL=https://api.shotstack.io/v1
+
+# App URL
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 4. Set up the database:
@@ -91,6 +94,16 @@ npm run dev
 
 6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Deploy to Production
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for comprehensive deployment instructions.
+
+**Quick Deploy Options:**
+- ✅ [Vercel](https://vercel.com) - Recommended (click button above)
+- ✅ [Netlify](https://netlify.com)
+- ✅ [AWS Amplify](https://aws.amazon.com/amplify/)
+- ✅ [Railway](https://railway.app)
+
 ## Project Structure
 
 ```
@@ -100,7 +113,8 @@ instant-ugc/
 │   │   ├── generate-script/   # GPT-4 script generation
 │   │   ├── generate-video/    # Video rendering orchestration
 │   │   ├── credits/           # Credit management
-│   │   └── ads/               # Ad history
+│   │   ├── ads/               # Ad history
+│   │   └── health/            # Health check endpoint
 │   ├── globals.css            # Global styles
 │   ├── layout.tsx             # Root layout
 │   └── page.tsx               # Home page
@@ -116,6 +130,8 @@ instant-ugc/
 │   └── index.ts              # TypeScript type definitions
 ├── ARCHITECTURE.md            # System architecture documentation
 ├── DATABASE_SCHEMA.md         # Database schema and setup
+├── DEPLOYMENT.md              # Deployment guide
+├── IMPLEMENTATION.md          # Implementation summary
 └── README.md                  # This file
 ```
 
@@ -193,33 +209,29 @@ Generates UGC-style script using GPT-4.
 }
 ```
 
-### POST /api/generate-video
-Orchestrates video generation with voiceover and rendering.
-
-**Request**:
-```json
-{
-  "productName": "EcoBottle Pro",
-  "targetAudience": "Eco-conscious millennials",
-  "mainBenefit": "Reduce plastic waste by 90%",
-  "script": { ... }
-}
-```
+### GET /api/health
+Health check endpoint for monitoring.
 
 **Response**:
 ```json
 {
-  "id": "ad_1234567890",
-  "videoUrl": "https://cdn.example.com/videos/ad_1234567890.mp4",
-  "status": "completed"
+  "status": "healthy",
+  "timestamp": "2026-03-16T22:00:00.000Z",
+  "version": "0.1.0",
+  "environment": "production",
+  "services": {
+    "supabase": true,
+    "openai": true,
+    "elevenlabs": true,
+    "videoRender": true
+  }
 }
 ```
 
-### GET/POST /api/credits
-Manage user credits.
-
-### GET/POST /api/ads
-Retrieve and create ad history.
+### Other Endpoints
+- `POST /api/generate-video` - Orchestrates video generation
+- `GET/POST /api/credits` - Manage user credits
+- `GET/POST /api/ads` - Retrieve and create ad history
 
 ## Credit System
 
@@ -236,23 +248,6 @@ Each video generation consumes:
 - Shotstack video render (~$0.50)
 - **Total**: ~$0.63 per video
 
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
-
-### Other Platforms
-
-The app can be deployed on any platform that supports Next.js:
-- Netlify
-- AWS Amplify
-- Digital Ocean App Platform
-- Railway
-
 ## Performance Optimization
 
 - **Async Processing**: Video generation happens in background
@@ -268,6 +263,21 @@ The app can be deployed on any platform that supports Next.js:
 - ✅ Rate limiting on API routes
 - ✅ Input validation and sanitization
 - ✅ Secure video URLs with expiration
+- ✅ Next.js 15.0.8 - Patched security vulnerabilities
+
+## Monitoring
+
+### Health Check
+Monitor your deployment at: `https://your-app.vercel.app/api/health`
+
+### Vercel Analytics
+Built-in analytics available in Vercel dashboard.
+
+### Error Tracking
+Consider integrating:
+- Sentry for error monitoring
+- LogRocket for session replay
+- Vercel Logs for debugging
 
 ## Future Enhancements
 
@@ -307,7 +317,10 @@ This project is licensed under the MIT License.
 
 ## Support
 
-For support, email support@instantugc.com or open an issue on GitHub.
+For support:
+- 📧 Email: support@instantugc.com
+- 🐛 Issues: [GitHub Issues](https://github.com/princebabe/Instant-UGC/issues)
+- 📚 Docs: Check [DEPLOYMENT.md](./DEPLOYMENT.md) and [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 ## Acknowledgments
 
@@ -320,3 +333,5 @@ For support, email support@instantugc.com or open an issue on GitHub.
 ---
 
 Built with ❤️ using Next.js, TypeScript, and AI
+
+**Ready to deploy?** Click the "Deploy with Vercel" button at the top! 🚀
